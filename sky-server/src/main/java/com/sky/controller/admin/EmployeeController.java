@@ -5,6 +5,7 @@ import com.sky.constant.StatusConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
 import com.sky.result.PageResult;
@@ -139,4 +140,19 @@ public class EmployeeController {
         employeeService.update(employeeDTO);
         return Result.success();
     }
+
+    /**
+     * 修改员工密码
+     *
+     * @param passwordEditDTO 修改员工密码的数据传输对象
+     * @return 返回Result格式的结果
+     */
+    @PutMapping("/editPassword")
+    public Result<Object> updatePassword(@RequestBody PasswordEditDTO passwordEditDTO){
+        log.info("修改员工的密码, 员工 ID 为: {}, 新密码为: {}, 旧密码为: {}",
+                passwordEditDTO.getEmpId(), passwordEditDTO.getNewPassword(), passwordEditDTO.getOldPassword());
+        employeeService.updatePassword(passwordEditDTO);
+        return Result.success();
+    }
+
 }

@@ -9,13 +9,16 @@ import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.PasswordEditFailedException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -52,7 +56,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         //密码比对
-        // TODO 后期需要进行md5加密，然后再进行比对
         password = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
         if (!password.equals(employee.getPassword())) {
             //密码错误
@@ -139,4 +142,31 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.update(employee);
     }
 
+    /**
+     * 修改员工密码
+     *
+     * @param passwordEditDTO 修改员工密码的数据传输对象
+     */
+    @Override
+    public void updatePassword(PasswordEditDTO passwordEditDTO) {
+        // 获取原密码，与新密码比对
+        Employee employee = employeeMapper.listById(BaseContext.getCurrentId());
+        String password = employee.getPassword();
+        String newPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes());
+        String oldPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getOldPassword().getBytes());
+        // 如果旧密码与原密码不相同，则抛出密码错误异常
+        if (!password.equals(oldPassword)){
+            log.error("修改密码时输入的原密码错误, 输入的原密码: {}", passwordEditDTO.getOldPassword());
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        }
+
+        // 如果旧密码与新密码相同，则抛出密码修改失败异常
+        if (password.equals(newPassword)){
+            log.error("修改密码失败, 新密码: {}", passwordEditDTO.getNewPassword());
+            throw new PasswordEditFailedException(MessageConstant.PASSWORD_EDIT_FAILED);
+        }
+        // 否则调用 update 方法修改密码
+        employee.setPassword(newPassword);
+        employeeMapper.update(employee);
+    }
 }

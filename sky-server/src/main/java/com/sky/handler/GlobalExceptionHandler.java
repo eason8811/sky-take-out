@@ -40,5 +40,4 @@ public class GlobalExceptionHandler {
         log.error("{} 用户名已存在", duplicateName);
         return Result.error(duplicateName + MessageConstant.NAME_EXISTED);
     }
-
 }
