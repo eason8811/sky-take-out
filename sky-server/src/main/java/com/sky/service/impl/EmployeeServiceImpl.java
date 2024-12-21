@@ -23,7 +23,6 @@ import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -58,7 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
 
-        if (employee.getStatus() == StatusConstant.DISABLE) {
+        if (StatusConstant.DISABLE.equals(employee.getStatus())) {
             //账号被锁定
             throw new AccountLockedException(MessageConstant.ACCOUNT_LOCKED);
         }
@@ -69,8 +68,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * 添加员工
+     *
      * @param employeeDTO 新增员工的数据传输对象
-     * */
+     */
     @Override
     public void insert(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
@@ -88,10 +88,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     /**
      * @param employeePageQueryDTO 员工分页查询的数据传输对象
      * @return 返回 PageResult 对象封装的分页信息
-     * */
+     */
     @Override
     public PageResult list(EmployeePageQueryDTO employeePageQueryDTO) {
-        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
         Page<Employee> employeeList = (Page<Employee>) employeeMapper.list(employeePageQueryDTO);
         long total = employeeList.getTotal();
         return new PageResult(total, employeeList);
@@ -100,12 +100,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     /**
      * 修改员工状态
      *
-     * @param id 需要修改的员工 ID
+     * @param id     需要修改的员工 ID
      * @param status 需要修改成的状态
-     * */
+     */
     @Override
-    public void updateStatus(Integer id, Integer status) {
-        employeeMapper.updateStatus(id, status);
+    public void updateStatus(Long id, Integer status) {
+        Employee employee = Employee.builder()
+                .id(id)
+                .status(status)
+                .build();
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * 根据 ID 查询员工
+     *
+     * @param id 查询的员工 ID
+     * @return Employee 员工实体类对象
+     */
+    @Override
+    public Employee listById(Long id) {
+        return employeeMapper.listById(id);
     }
 
 }
