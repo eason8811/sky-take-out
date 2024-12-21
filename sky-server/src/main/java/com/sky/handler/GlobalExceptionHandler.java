@@ -18,13 +18,13 @@ public class GlobalExceptionHandler {
 
     /**
      * 捕获业务异常
-     * @param ex 异常对象
+     * @param e 异常对象
      * @return 返回Result格式的错误信息
      */
     @ExceptionHandler
-    public Result exceptionHandler(BaseException ex){
-        log.error("异常信息：{}", ex.getMessage());
-        return Result.error(ex.getMessage());
+    public Result<Object> exceptionHandler(BaseException e){
+        log.error("异常信息：{}", e.getMessage());
+        return Result.error(e.getMessage());
     }
 
     /**
@@ -35,9 +35,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public Result<Object> duplicateKeyExceptionHandler(SQLIntegrityConstraintViolationException e){
         String msg = e.getMessage();
-        String duplicateName = msg.split(" ")[2];
-        duplicateName = duplicateName.replaceAll("'", "");
-        log.error("{} 用户名已存在", duplicateName);
-        return Result.error(duplicateName + MessageConstant.NAME_EXISTED);
+        if (msg.contains("Duplicate")){
+            String duplicateName = msg.split(" ")[2];
+            duplicateName = duplicateName.replaceAll("'", "");
+            log.error("字段 {} 已存在", duplicateName);
+            return Result.error(duplicateName + MessageConstant.COLUMN_EXISTED);
+        }
+        else {
+            log.error("SQL异常, 异常信息: {}", msg);
+            return Result.error(MessageConstant.UNKNOWN_ERROR);
+        }
+
     }
+
 }
