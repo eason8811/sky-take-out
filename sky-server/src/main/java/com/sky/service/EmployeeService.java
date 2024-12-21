@@ -44,4 +44,11 @@ public interface EmployeeService {
      * @return Employee 员工实体类对象
      */
     Employee listById(Long id);
+
+    /**
+     * 修改员工信息
+     *
+     * @param employeeDTO 修改员工的数据传输对象
+     */
+    void update(EmployeeDTO employeeDTO);
 }

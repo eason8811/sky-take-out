@@ -122,7 +122,21 @@ public class EmployeeController {
      */
     @GetMapping("/{id}")
     public Result<Employee> listById(@PathVariable Long id) {
+        log.info("根据 ID 查询员工信息, ID 为: {}", id);
         Employee employee = employeeService.listById(id);
         return Result.success(employee);
+    }
+
+    /**
+     * 修改员工信息
+     *
+     * @param employeeDTO 修改员工的数据传输对象
+     * @return 返回Result格式的结果
+     */
+    @PutMapping
+    public Result<Object> update(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("修改员工信息, 参数为: {}", employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
     }
 }
