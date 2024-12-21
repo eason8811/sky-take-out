@@ -11,6 +11,7 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,8 @@ public class EmployeeController {
     /**
      * 登录
      *
-     * @param employeeLoginDTO
-     * @return
+     * @param employeeLoginDTO 员工登录的数据传输对象
+     * @return 返回Result格式的结果
      */
     @PostMapping("/login")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
@@ -62,9 +63,9 @@ public class EmployeeController {
     }
 
     /**
-     * 退出
+     * 退出登录
      *
-     * @return
+     * @return 返回Result格式的结果
      */
     @PostMapping("/logout")
     public Result<String> logout() {
@@ -72,8 +73,10 @@ public class EmployeeController {
     }
 
     /**
-     *
      * 新增员工
+     *
+     * @param employeeDTO 新增员工的数据传输对象
+     * @return 返回Result格式的结果
      * */
 
     @PostMapping
@@ -83,10 +86,32 @@ public class EmployeeController {
         return Result.success();
     }
 
-    @GetMapping
+    /**
+     * 分页查询员工
+     *
+     * @param employeePageQueryDTO 员工分页查询的数据传输对象
+     * @return 返回Result格式的结果
+     * */
+    @GetMapping("/page")
     public Result<PageResult> list(EmployeePageQueryDTO employeePageQueryDTO){
+        log.info("员工分页查询, 参数为: {}", employeePageQueryDTO);
+        PageResult pageResult = employeeService.list(employeePageQueryDTO);
+        return Result.success(pageResult);
+    }
 
+    /**
+     * 修改员工状态
+     *
+     * @param id 需要修改的员工 ID
+     * @param status 需要修改成的状态
+     * @return 返回Result格式的结果
+     * */
+    @PostMapping("/status/{status}")
+    public Result<Object> updateStatus(@RequestParam("id") Integer id, @PathVariable Integer status){
+        employeeService.updateStatus(id, status);
         return Result.success();
     }
+
+
 
 }

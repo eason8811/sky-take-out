@@ -1,16 +1,20 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -29,8 +34,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     /**
      * 员工登录
      *
-     * @param employeeLoginDTO
-     * @return
+     * @param employeeLoginDTO 员工登录的数据传输对象
+     * @return 返回employee员工实体对象
      */
     public Employee login(EmployeeLoginDTO employeeLoginDTO) {
         String username = employeeLoginDTO.getUsername();
@@ -62,6 +67,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    /**
+     * 添加员工
+     * @param employeeDTO 新增员工的数据传输对象
+     * */
     @Override
     public void insert(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
@@ -74,6 +83,29 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setUpdateUser(BaseContext.getCurrentId());
         // 插入数据
         employeeMapper.insert(employee);
+    }
+
+    /**
+     * @param employeePageQueryDTO 员工分页查询的数据传输对象
+     * @return 返回 PageResult 对象封装的分页信息
+     * */
+    @Override
+    public PageResult list(EmployeePageQueryDTO employeePageQueryDTO) {
+        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+        Page<Employee> employeeList = (Page<Employee>) employeeMapper.list(employeePageQueryDTO);
+        long total = employeeList.getTotal();
+        return new PageResult(total, employeeList);
+    }
+
+    /**
+     * 修改员工状态
+     *
+     * @param id 需要修改的员工 ID
+     * @param status 需要修改成的状态
+     * */
+    @Override
+    public void updateStatus(Integer id, Integer status) {
+        employeeMapper.updateStatus(id, status);
     }
 
 }
