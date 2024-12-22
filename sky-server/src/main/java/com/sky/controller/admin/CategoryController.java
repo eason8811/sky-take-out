@@ -57,4 +57,17 @@ public class CategoryController {
         return Result.success();
     }
 
+    /**
+     * 修改分类信息
+     *
+     * @param categoryDTO 修改分类的数据传输对象
+     * @return 返回Result格式的对象
+     */
+    @PutMapping
+    public Result<Object> update(@RequestBody CategoryDTO categoryDTO){
+        log.info("修改分类信息, 参数为: {}", categoryDTO);
+        categoryService.update(categoryDTO);
+        return Result.success();
+    }
+
 }

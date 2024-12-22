@@ -28,4 +28,11 @@ public interface CategoryService {
      * @param status 需要修改的分类目标状态
      */
     void updateStatus(Long id, Integer status);
+
+    /**
+     * 修改分类信息
+     *
+     * @param categoryDTO 修改分类的数据传输对象
+     */
+    void update(CategoryDTO categoryDTO);
 }
