@@ -37,10 +37,24 @@ public class CategoryController {
      * @return 返回Result格式的对象
      */
     @GetMapping("/page")
-    public Result<PageResult> list(CategoryPageQueryDTO categoryPageQueryDTO){
+    public Result<PageResult> list(CategoryPageQueryDTO categoryPageQueryDTO) {
         log.info("分类的分页查询, 参数为: {}", categoryPageQueryDTO);
         PageResult result = categoryService.list(categoryPageQueryDTO);
         return Result.success(result);
+    }
+
+    /**
+     * 启用、禁用分类
+     *
+     * @param id     分类的 ID
+     * @param status 需要修改的分类目标状态
+     * @return 返回Result格式的对象
+     */
+    @PostMapping("/status/{status}")
+    public Result<Object> updateStatus(Long id, @PathVariable Integer status) {
+        log.info("{} 分类, ID 为: {}", status.equals(1) ? "启用" : "禁用", id);
+        categoryService.updateStatus(id, status);
+        return Result.success();
     }
 
 }

@@ -33,8 +33,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;
-    @Autowired
-    private EmployeeService employeeService;
 
     /**
      * 员工登录
@@ -113,6 +111,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = Employee.builder()
                 .id(id)
                 .status(status)
+                .updateTime(LocalDateTime.now())
+                .updateUser(BaseContext.getCurrentId())
                 .build();
         employeeMapper.update(employee);
     }
@@ -155,13 +155,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         String newPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes());
         String oldPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getOldPassword().getBytes());
         // 如果旧密码与原密码不相同，则抛出密码错误异常
-        if (!password.equals(oldPassword)){
+        if (!password.equals(oldPassword)) {
             log.error("修改密码时输入的原密码错误, 输入的原密码: {}", passwordEditDTO.getOldPassword());
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
 
         // 如果旧密码与新密码相同，则抛出密码修改失败异常
-        if (password.equals(newPassword)){
+        if (password.equals(newPassword)) {
             log.error("修改密码失败, 新密码: {}", passwordEditDTO.getNewPassword());
             throw new PasswordEditFailedException(MessageConstant.PASSWORD_EDIT_FAILED);
         }

@@ -52,4 +52,21 @@ public class CategoryServiceImpl implements CategoryService {
         long total = page.getTotal();
         return new PageResult(total, page);
     }
+
+    /**
+     * 启用、禁用分类
+     *
+     * @param id     分类的 ID
+     * @param status 需要修改的分类目标状态
+     */
+    @Override
+    public void updateStatus(Long id, Integer status) {
+        Category category = Category.builder()
+                .id(id)
+                .status(status)
+                .updateTime(LocalDateTime.now())
+                .updateUser(BaseContext.getCurrentId())
+                .build();
+        categoryMapper.update(category);
+    }
 }

@@ -20,4 +20,12 @@ public interface CategoryService {
      * @return 返回PageResult格式的对象
      */
     PageResult list(CategoryPageQueryDTO categoryPageQueryDTO);
+
+    /**
+     * 启用、禁用分类
+     *
+     * @param id     分类的 ID
+     * @param status 需要修改的分类目标状态
+     */
+    void updateStatus(Long id, Integer status);
 }

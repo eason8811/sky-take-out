@@ -22,4 +22,11 @@ public interface CategoryMapper {
      * @return 返回Page格式的对象
      */
     Page<Category> list(CategoryPageQueryDTO categoryPageQueryDTO);
+
+    /**
+     * 根据 category 实体类对象修改分类信息
+     *
+     * @param category 分类的实体类对象
+     */
+    void update(Category category);
 }
