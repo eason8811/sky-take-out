@@ -19,6 +19,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -114,5 +116,16 @@ public class CategoryServiceImpl implements CategoryService {
         }
         // 都没有关联则执行删除
         categoryMapper.delete(id);
+    }
+
+    /**
+     * 根据type查询分类信息
+     *
+     * @param type 输入的分类
+     * @return 返回包含 Category 对象的List集合
+     */
+    @Override
+    public List<Category> listByType(Integer type) {
+        return categoryMapper.listByType(type);
     }
 }

@@ -7,6 +7,8 @@ import com.sky.entity.Category;
 import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface CategoryMapper {
 
@@ -40,4 +42,12 @@ public interface CategoryMapper {
      * @param id 需要删除的分类 ID
      */
     void delete(Long id);
+
+    /**
+     * 根据type查询分类信息
+     *
+     * @param type 输入的分类
+     * @return 返回包含 Category 对象的List集合
+     */
+    List<Category> listByType(Integer type);
 }
