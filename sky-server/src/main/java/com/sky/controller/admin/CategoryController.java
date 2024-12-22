@@ -70,4 +70,17 @@ public class CategoryController {
         return Result.success();
     }
 
+    /**
+     * 根据 ID 删除分类信息
+     *
+     * @param id 需要删除的分类 ID
+     * @return 返回Result格式的对象
+     */
+    @DeleteMapping
+    public Result<Object> delete(Long id){
+        log.info("根据 ID 删除分类信息, ID 为: {}", id);
+        categoryService.delete(id);
+        return Result.success();
+    }
+
 }

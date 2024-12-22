@@ -29,4 +29,11 @@ public interface CategoryMapper {
      * @param category 分类的实体类对象
      */
     void update(Category category);
+
+    /**
+     * 根据 ID 删除分类信息
+     *
+     * @param id 需要删除的分类 ID
+     */
+    void delete(Long id);
 }

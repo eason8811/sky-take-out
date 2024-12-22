@@ -53,4 +53,8 @@
         </set>
         where id = #{id}
     </update>
+
+    <delete id="delete">
+        delete from category where id = #{id}
+    </delete>
 </mapper>

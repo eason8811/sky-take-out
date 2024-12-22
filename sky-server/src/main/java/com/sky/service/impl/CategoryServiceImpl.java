@@ -83,4 +83,14 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.update(category);
     }
+
+    /**
+     * 根据 ID 删除分类信息
+     *
+     * @param id 需要删除的分类 ID
+     */
+    @Override
+    public void delete(Long id) {
+        categoryMapper.delete(id);
+    }
 }
