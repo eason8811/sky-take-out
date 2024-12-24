@@ -103,4 +103,32 @@ public class DishServiceImpl implements DishService {
         dish.setId(id);
         dishMapper.update(dish);
     }
+
+    /**
+     * 根据ID查询菜品
+     *
+     * @param id 需要查询的菜品 ID
+     * @return 返回 DishVO 格式的对象
+     */
+    @Override
+    public DishVO listById(Long id) {
+        // 根据ID查询菜品信息
+        DishVO dishVO = dishMapper.listById(id);
+
+        // 根据菜品的ID查询菜品的口味信息
+        List<DishFlavor> flavors = dishFlavorMapper.listByDishId(id);
+        dishVO.setFlavors(flavors);
+        return dishVO;
+    }
+
+    /**
+     * 根据分类ID查询菜品
+     *
+     * @param categoryId 需要查询的菜品的分类的ID
+     * @return 返回封装了 Dish 的集合对象
+     */
+    @Override
+    public List<Dish> listByCategoryId(Long categoryId) {
+        return dishMapper.listByCategoryId(categoryId);
+    }
 }

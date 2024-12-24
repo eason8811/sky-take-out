@@ -2,9 +2,11 @@ package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -84,6 +86,32 @@ public class DishController {
         log.info("修改菜品的起售、停售状态, 菜品 ID 为: {}, 目标状态为: {}", id, status);
         dishService.updateStatus(status, id);
         return Result.success();
+    }
+
+    /**
+     * 根据ID查询菜品
+     *
+     * @param id 需要查询的菜品 ID
+     * @return 返回Result格式的对象
+     */
+    @GetMapping("/{id}")
+    public Result<DishVO> listById(@PathVariable Long id) {
+        log.info("根据 ID 查询菜品信息, ID 为: {}", id);
+        DishVO dishVO = dishService.listById(id);
+        return Result.success(dishVO);
+    }
+
+    /**
+     * 根据分类ID查询菜品
+     *
+     * @param categoryId 需要查询的菜品的分类的ID
+     * @return 返回Result格式的对象
+     */
+    @GetMapping("/list")
+    public Result<List<Dish>> listByCategoryId(@RequestParam("categoryId") Long categoryId){
+        log.info("根据分类的 ID 查询菜品, ID 为: {}", categoryId);
+        List<Dish> dishes = dishService.listByCategoryId(categoryId);
+        return Result.success(dishes);
     }
 
 }

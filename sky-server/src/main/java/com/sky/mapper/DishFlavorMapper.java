@@ -20,4 +20,12 @@ public interface DishFlavorMapper {
      * @param ids 需要删除的口味所属的菜品的ID
      * */
     void deleteByDishId(List<Long> ids);
+
+    /**
+     * 根据菜品ID查询菜品的口味信息
+     *
+     * @param id 菜品的 ID
+     * @return 返回封装了 DishFlavor 的集合对象
+     */
+    List<DishFlavor> listByDishId(Long id);
 }

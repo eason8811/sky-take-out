@@ -2,7 +2,9 @@ package com.sky.service;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
+import com.sky.vo.DishVO;
 
 import java.util.List;
 
@@ -44,4 +46,20 @@ public interface DishService {
      * @param id     需要修改的菜品的 ID
      */
     void updateStatus(Integer status, Long id);
+
+    /**
+     * 根据ID查询菜品
+     *
+     * @param id 需要查询的菜品 ID
+     * @return 返回 DishVO 格式的对象
+     */
+    DishVO listById(Long id);
+
+    /**
+     * 根据分类ID查询菜品
+     *
+     * @param categoryId 需要查询的菜品的分类的ID
+     * @return 返回封装了 Dish 的集合对象
+     */
+    List<Dish> listByCategoryId(Long categoryId);
 }

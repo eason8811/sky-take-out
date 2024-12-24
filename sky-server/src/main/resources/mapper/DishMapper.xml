@@ -68,4 +68,17 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="listById" resultType="com.sky.vo.DishVO">
+        select d.*, c.name categoryName
+        from dish d
+                 left join category c on d.category_id = c.id
+        where d.id = #{id}
+    </select>
+
+    <select id="listByCategoryId" resultType="com.sky.entity.Dish">
+        select *
+        from dish
+        where category_id = #{id}
+    </select>
 </mapper>
