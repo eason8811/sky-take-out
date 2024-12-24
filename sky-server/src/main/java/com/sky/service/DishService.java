@@ -28,5 +28,12 @@ public interface DishService {
      *
      * @param ids 通过Query参数输入的需要删除的id数组
      */
-    void delete(List<Integer> ids);
+    void delete(List<Long> ids);
+
+    /**
+     * 修改菜品
+     *
+     * @param dishDTO 修改菜品的数据传输对象
+     */
+    void update(DishDTO dishDTO);
 }

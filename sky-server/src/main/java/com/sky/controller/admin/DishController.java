@@ -52,9 +52,22 @@ public class DishController {
      * @return 返回Result格式的对象
      */
     @DeleteMapping
-    public Result<Object> delete(@RequestParam("ids")List<Integer> ids){
+    public Result<Object> delete(@RequestParam("ids")List<Long> ids){
         log.info("删除菜品信息, 需要删除的ID为: {}", ids);
         dishService.delete(ids);
+        return Result.success();
+    }
+
+    /**
+     * 修改菜品
+     *
+     * @param dishDTO 修改菜品的数据传输对象
+     * @return 返回Result格式的对象
+     */
+    @PutMapping
+    public Result<Object> update(@RequestBody DishDTO dishDTO){
+        log.info("修改菜品, 参数为: {}", dishDTO);
+        dishService.update(dishDTO);
         return Result.success();
     }
 }

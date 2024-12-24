@@ -41,5 +41,13 @@ public interface DishMapper {
      *
      * @param ids 通过Query参数输入的需要删除的id数组
      */
-    void delete(List<Integer> ids);
+    void delete(List<Long> ids);
+
+    /**
+     * 修改菜品
+     *
+     * @param dish 修改菜品的实体类对象
+     */
+    @AutoFill(OperationType.UPDATE)
+    void update(Dish dish);
 }
