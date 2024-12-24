@@ -89,4 +89,18 @@ public class DishServiceImpl implements DishService {
         dishFlavorMapper.deleteByDishId(List.of(dish.getId()));
         dishFlavorMapper.insert(flavors);
     }
+
+    /**
+     * 修改菜品起售、停售状态
+     *
+     * @param status 需要修改的菜品的目标状态
+     * @param id     需要修改的菜品的 ID
+     */
+    @Override
+    public void updateStatus(Integer status, Long id) {
+        Dish dish = new Dish();
+        dish.setStatus(status);
+        dish.setId(id);
+        dishMapper.update(dish);
+    }
 }

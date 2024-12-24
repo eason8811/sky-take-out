@@ -36,4 +36,12 @@ public interface DishService {
      * @param dishDTO 修改菜品的数据传输对象
      */
     void update(DishDTO dishDTO);
+
+    /**
+     * 修改菜品起售、停售状态
+     *
+     * @param status 需要修改的菜品的目标状态
+     * @param id     需要修改的菜品的 ID
+     */
+    void updateStatus(Integer status, Long id);
 }
