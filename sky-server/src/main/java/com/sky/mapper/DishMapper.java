@@ -8,6 +8,8 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface DishMapper {
 
@@ -33,4 +35,11 @@ public interface DishMapper {
      * @return 返回Page格式的集合
      */
     Page<DishVO> list(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * 删除菜品
+     *
+     * @param ids 通过Query参数输入的需要删除的id数组
+     */
+    void delete(List<Integer> ids);
 }

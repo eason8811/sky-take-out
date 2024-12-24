@@ -9,4 +9,12 @@
                 (#{flavor.dishId}, #{flavor.name}, #{flavor.value})
             </foreach>
     </insert>
+
+    <delete id="deleteByDishId">
+        delete from dish_flavor
+        where
+            <foreach collection="ids" item="id" separator="or">
+                dish_id = #{id}
+            </foreach>
+    </delete>
 </mapper>

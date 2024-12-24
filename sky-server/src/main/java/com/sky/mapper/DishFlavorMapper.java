@@ -14,4 +14,10 @@ public interface DishFlavorMapper {
      * @param flavors 新增菜品的数据传输对象
      */
     void insert(List<DishFlavor> flavors);
+
+    /**
+     * 根据菜品ID删除口味信息
+     * @param ids 需要删除的口味所属的菜品的ID
+     * */
+    void deleteByDishId(List<Integer> ids);
 }

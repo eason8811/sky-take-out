@@ -57,4 +57,16 @@ public class DishServiceImpl implements DishService {
         Page<DishVO> page = dishMapper.list(dishPageQueryDTO);
         return new PageResult(page.getTotal(), page.getResult());
     }
+
+    /**
+     * 删除菜品
+     *
+     * @param ids 通过Query参数输入的需要删除的id数组
+     */
+    @Transactional
+    @Override
+    public void delete(List<Integer> ids) {
+        dishMapper.delete(ids);
+        dishFlavorMapper.deleteByDishId(ids);
+    }
 }
