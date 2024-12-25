@@ -2,10 +2,15 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.exception.DeletionNotAllowedException;
+import com.sky.exception.SetmealEnableFailedException;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.mapper.SetMealMapper;
 import com.sky.result.PageResult;
@@ -17,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SetMealServiceImpl implements SetMealService {
@@ -25,6 +31,8 @@ public class SetMealServiceImpl implements SetMealService {
     private SetMealMapper setMealMapper;
     @Autowired
     private SetMealDishMapper setMealDishMapper;
+    @Autowired
+    private DishMapper dishMapper;
 
     /**
      * 新增套餐
@@ -68,6 +76,22 @@ public class SetMealServiceImpl implements SetMealService {
      */
     @Override
     public void updateStatus(Integer status, Long id) {
+        if (Objects.equals(status, StatusConstant.ENABLE)){
+            // 检查套餐中的菜品是否存在未起售菜品
+            // 先获取需要修改状态的套餐 与菜品之间的关系数据
+            List<SetmealDish> setmealDishes = setMealDishMapper.listBySetMealId(id);
+            List<Long> dishIds = setmealDishes.stream()
+                    .map(SetmealDish::getDishId)
+                    .toList();
+
+            // 判断是否状态为禁用的菜品数目为0
+            Integer disableCount = dishMapper.getDisableCount(dishIds);
+            if (disableCount != null){
+                throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+            }
+        }
+
+        // 全部为启用状态则启用套餐
         Setmeal setmeal = Setmeal.builder()
                 .status(status)
                 .id(id)
@@ -83,6 +107,10 @@ public class SetMealServiceImpl implements SetMealService {
     @Transactional
     @Override
     public void delete(List<Long> ids) {
+        Integer disableCount = setMealMapper.getDisableCount(ids);
+        if (disableCount == null || disableCount < ids.size()) {
+            throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+        }
         // 根据需要删除的套餐 ID 删除套餐
         setMealMapper.delete(ids);
         // 根据需要删除的套餐 ID 删除套餐与菜品的关联信息
@@ -103,5 +131,24 @@ public class SetMealServiceImpl implements SetMealService {
         List<SetmealDish> setmealDishList = setMealDishMapper.listBySetMealId(id);
         setmealVO.setSetmealDishes(setmealDishList);
         return setmealVO;
+    }
+
+    /**
+     * 修改套餐信息
+     *
+     * @param setmealDTO 需要修改的菜品的信息
+     */
+    @Transactional
+    @Override
+    public void update(SetmealDTO setmealDTO) {
+        // 先更新套餐信息
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        setMealMapper.update(setmeal);
+        // 先删除套餐与菜品的关联信息, 再重新添加
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        Long setMealId = setmeal.getId();
+        setMealDishMapper.delete(List.of(setMealId));
+        setMealDishMapper.insert(setmealDishes);
     }
 }

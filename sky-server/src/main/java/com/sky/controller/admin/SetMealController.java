@@ -89,6 +89,18 @@ public class SetMealController {
         return Result.success(setmealVO);
     }
 
+    /**
+     * 修改套餐信息
+     *
+     * @param setmealDTO 需要修改的菜品的信息
+     * @return 返回Result格式的对象
+     */
+    @PutMapping
+    public Result<Object> update(@RequestBody SetmealDTO setmealDTO){
+        log.info("修改菜品信息, 参数为: {}", setmealDTO);
+        setMealService.update(setmealDTO);
+        return Result.success();
+    }
 
 
 }

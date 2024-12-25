@@ -46,4 +46,11 @@ public interface SetMealService {
      * @return 返回 SetmealVO 视图对象
      */
     SetmealVO listById(Long id);
+
+    /**
+     * 修改套餐信息
+     *
+     * @param setmealDTO 需要修改的菜品的信息
+     */
+    void update(SetmealDTO setmealDTO);
 }

@@ -75,4 +75,15 @@
                  left join category c on s.category_id = c.id
         where s.id = #{id}
     </select>
+
+    <select id="getDisableCount" resultType="java.lang.Integer">
+        select count(status) status_count
+        from setmeal
+        where id in 
+              <foreach collection="ids" item="id" separator="," open="(" close=")">
+                  #{id}
+              </foreach>
+          and status = 0
+        group by status
+    </select>
 </mapper>

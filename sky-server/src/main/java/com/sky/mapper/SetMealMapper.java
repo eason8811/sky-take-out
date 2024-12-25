@@ -58,4 +58,12 @@ public interface SetMealMapper {
      * @return 返回 SetmealVO 视图对象
      */
     SetmealVO listById(Long id);
+
+    /**
+     * 获取状态为禁用的套餐的数量
+     *
+     * @param ids 需要获取的状态为禁用的套餐的数量
+     * @return 状态为禁用的套餐的数量
+     */
+    Integer getDisableCount(List<Long> ids);
 }
