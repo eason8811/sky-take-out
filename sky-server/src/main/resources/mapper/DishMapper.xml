@@ -32,9 +32,9 @@
 
     <delete id="delete">
         delete from dish
-        where
-        <foreach collection="ids" item="id" separator="or">
-            id = #{id}
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
         </foreach>
     </delete>
     
@@ -80,5 +80,16 @@
         select *
         from dish
         where category_id = #{id}
+    </select>
+
+    <select id="getDisableCount" resultType="java.lang.Integer">
+        select count(status) status_count
+        from dish
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+          and status = 0
+        group by status
     </select>
 </mapper>

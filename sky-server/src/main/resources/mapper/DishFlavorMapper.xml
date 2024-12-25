@@ -12,9 +12,9 @@
 
     <delete id="deleteByDishId">
         delete from dish_flavor
-        where
-            <foreach collection="ids" item="id" separator="or">
-                dish_id = #{id}
+        where dish_id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                 #{id}
             </foreach>
     </delete>
 

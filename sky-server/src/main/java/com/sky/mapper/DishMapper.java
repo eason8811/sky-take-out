@@ -66,4 +66,12 @@ public interface DishMapper {
      * @return 返回封装了 Dish 的集合对象
      */
     List<Dish> listByCategoryId(Long categoryId);
+
+    /**
+     * 获取提供的 ID 集合中status为禁用的对象
+     *
+     * @param ids 需要获取的 ID 集合
+     * @return 禁用的菜品的数量
+     */
+    Integer getDisableCount(List<Long> ids);
 }

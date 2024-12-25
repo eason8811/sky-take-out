@@ -2,12 +2,15 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetMealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -25,6 +28,8 @@ public class DishServiceImpl implements DishService {
     private DishMapper dishMapper;
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+    @Autowired
+    private SetMealDishMapper setMealDishMapper;
 
     /**
      * 新增菜品
@@ -66,6 +71,18 @@ public class DishServiceImpl implements DishService {
     @Transactional
     @Override
     public void delete(List<Long> ids) {
+        // 判断菜品是否启用, 启用的菜品无法被删除
+        Integer disableCount = dishMapper.getDisableCount(ids);
+        if (disableCount < ids.size()){
+            throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+        }
+
+        // 判断菜品是否被套餐关联, 如果被关联则无法被删除
+        List<Long> setMealIds = setMealDishMapper.listSetMealIdByDishId(ids);
+        if (!setMealIds.isEmpty()){
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
+        // 删除菜品以及口味
         dishMapper.delete(ids);
         dishFlavorMapper.deleteByDishId(ids);
     }
