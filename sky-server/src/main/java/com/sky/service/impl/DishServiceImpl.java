@@ -73,7 +73,7 @@ public class DishServiceImpl implements DishService {
     public void delete(List<Long> ids) {
         // 判断菜品是否启用, 启用的菜品无法被删除
         Integer disableCount = dishMapper.getDisableCount(ids);
-        if (disableCount < ids.size()){
+        if (disableCount == null || disableCount < ids.size()){
             throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
         }
 
