@@ -35,4 +35,10 @@ public interface SetMealMapper {
      */
     Page<SetmealVO> list(SetmealPageQueryDTO setmealPageQueryDTO);
 
+    /**
+     * 修改套餐起售、停售状态
+     *
+     * @param setmeal 需要修改的套餐的实体类对象
+     */
+    void update(Setmeal setmeal);
 }

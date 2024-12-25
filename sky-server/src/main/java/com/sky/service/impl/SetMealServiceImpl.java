@@ -59,4 +59,19 @@ public class SetMealServiceImpl implements SetMealService {
         Page<SetmealVO> page = setMealMapper.list(setmealPageQueryDTO);
         return new PageResult(page.getTotal(), page.getResult());
     }
+
+    /**
+     * 修改套餐起售、停售状态
+     *
+     * @param status 需要修改的套餐的目标状态
+     * @param id     需要修改的套餐 ID
+     */
+    @Override
+    public void updateStatus(Integer status, Long id) {
+        Setmeal setmeal = Setmeal.builder()
+                .status(status)
+                .id(id)
+                .build();
+        setMealMapper.update(setmeal);
+    }
 }

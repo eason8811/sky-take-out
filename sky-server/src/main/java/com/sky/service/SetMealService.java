@@ -20,4 +20,12 @@ public interface SetMealService {
      * @return 返回 PageResult 格式的对象
      */
     PageResult list(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /**
+     * 修改套餐起售、停售状态
+     *
+     * @param status 需要修改的套餐的目标状态
+     * @param id     需要修改的套餐 ID
+     */
+    void updateStatus(Integer status, Long id);
 }

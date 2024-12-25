@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
@@ -42,4 +43,22 @@ public class SetMealController {
         PageResult result = setMealService.list(setmealPageQueryDTO);
         return Result.success(result);
     }
+
+    /**
+     * 修改套餐起售、停售状态
+     *
+     * @param status 需要修改的套餐的目标状态
+     * @param id     需要修改的套餐 ID
+     * @return 返回Result格式的对象
+     */
+    @PostMapping("/status/{status}")
+    public Result<Object> updateStatus(@PathVariable Integer status,
+                                       @RequestParam("id") Long id){
+        log.info("修改套餐起售、停售状态, 修改的菜品 ID: {}, 目标状态: {}（{}）", id,
+                status, status.equals(StatusConstant.ENABLE) ? "启用" : "禁用");
+        setMealService.updateStatus(status, id);
+        return Result.success();
+    }
+
+
 }

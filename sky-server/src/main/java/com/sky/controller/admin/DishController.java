@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
@@ -83,7 +84,8 @@ public class DishController {
     @PostMapping("/status/{status}")
     public Result<Object> updateStatus(@PathVariable Integer status,
                                        @RequestParam("id") Long id) {
-        log.info("修改菜品的起售、停售状态, 菜品 ID 为: {}, 目标状态为: {}", id, status);
+        log.info("修改菜品的起售、停售状态, 菜品 ID 为: {}, 目标状态为: {}（{}）", id,
+                status, status.equals(StatusConstant.ENABLE) ? "启用" : "禁用");
         dishService.updateStatus(status, id);
         return Result.success();
     }
