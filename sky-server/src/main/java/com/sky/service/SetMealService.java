@@ -3,6 +3,9 @@ package com.sky.service;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
+import com.sky.vo.SetmealVO;
+
+import java.util.List;
 
 public interface SetMealService {
 
@@ -28,4 +31,19 @@ public interface SetMealService {
      * @param id     需要修改的套餐 ID
      */
     void updateStatus(Integer status, Long id);
+
+    /**
+     * 批量删除套餐
+     *
+     * @param ids 需要删除的套餐的 ID 信息集合
+     */
+    void delete(List<Long> ids);
+
+    /**
+     * 根据 ID 查询套餐信息
+     *
+     * @param id 需要查询的套餐 ID
+     * @return 返回 SetmealVO 视图对象
+     */
+    SetmealVO listById(Long id);
 }

@@ -8,6 +8,8 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface SetMealMapper {
 
@@ -41,4 +43,19 @@ public interface SetMealMapper {
      * @param setmeal 需要修改的套餐的实体类对象
      */
     void update(Setmeal setmeal);
+
+    /**
+     * 批量删除套餐
+     *
+     * @param ids 需要删除的套餐的 ID 信息集合
+     */
+    void delete(List<Long> ids);
+
+    /**
+     * 根据 ID 查询套餐信息
+     *
+     * @param id 需要查询的套餐 ID
+     * @return 返回 SetmealVO 视图对象
+     */
+    SetmealVO listById(Long id);
 }

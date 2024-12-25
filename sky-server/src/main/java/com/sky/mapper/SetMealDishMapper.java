@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -22,4 +23,19 @@ public interface SetMealDishMapper {
      * @param setmealDishes 用于新增套餐的 套餐与菜品关联信息的对象
      */
     void insert(List<SetmealDish> setmealDishes);
+
+    /**
+     * 批量删除套餐与菜品的关联信息
+     *
+     * @param setMealIds 需要删除的套餐的 ID 信息集合
+     */
+    void delete(List<Long> setMealIds);
+
+    /**
+     * 根据 setMealId 查询套餐与菜品的关联信息
+     *
+     * @param setMealId 需要查询的套餐 ID
+     * @return 返回封装了 SetmealDish 对象的 List 集合
+     */
+    List<SetmealDish> listBySetMealId(Long setMealId);
 }

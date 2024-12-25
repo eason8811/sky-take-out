@@ -6,9 +6,12 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetMealService;
+import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/setmeal")
@@ -59,6 +62,33 @@ public class SetMealController {
         setMealService.updateStatus(status, id);
         return Result.success();
     }
+
+    /**
+     * 批量删除套餐
+     *
+     * @param ids 需要删除的套餐的 ID 信息集合
+     * @return 返回Result格式的对象
+     */
+    @DeleteMapping
+    public Result<Object> delete(@RequestParam("ids")List<Long> ids){
+        log.info("批量删除套餐, 参数为: {}", ids);
+        setMealService.delete(ids);
+        return Result.success();
+    }
+
+    /**
+     * 根据 ID 查询套餐信息
+     *
+     * @param id 需要查询的套餐 ID
+     * @return 返回封装了 SetmealVO 视图对象的 Result 格式的对象
+     */
+    @GetMapping("/{id}")
+    public Result<SetmealVO> listById(@PathVariable Long id){
+        log.info("根据 ID 查询套餐信息, ID 为: {}", id);
+        SetmealVO setmealVO = setMealService.listById(id);
+        return Result.success(setmealVO);
+    }
+
 
 
 }

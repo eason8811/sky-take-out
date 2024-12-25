@@ -74,4 +74,34 @@ public class SetMealServiceImpl implements SetMealService {
                 .build();
         setMealMapper.update(setmeal);
     }
+
+    /**
+     * 批量删除套餐
+     *
+     * @param ids 需要删除的套餐的 ID 信息集合
+     */
+    @Transactional
+    @Override
+    public void delete(List<Long> ids) {
+        // 根据需要删除的套餐 ID 删除套餐
+        setMealMapper.delete(ids);
+        // 根据需要删除的套餐 ID 删除套餐与菜品的关联信息
+        setMealDishMapper.delete(ids);
+    }
+
+    /**
+     * 根据 ID 查询套餐信息
+     *
+     * @param id 需要查询的套餐 ID
+     * @return 返回 SetmealVO 视图对象
+     */
+    @Override
+    public SetmealVO listById(Long id) {
+        // 先查询 setMeal 套餐信息
+        SetmealVO setmealVO = setMealMapper.listById(id);
+        // 再查询套餐与菜品关联的信息 (setMealDish)
+        List<SetmealDish> setmealDishList = setMealDishMapper.listBySetMealId(id);
+        setmealVO.setSetmealDishes(setmealDishList);
+        return setmealVO;
+    }
 }
