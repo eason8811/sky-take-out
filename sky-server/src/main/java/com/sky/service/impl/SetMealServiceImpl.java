@@ -15,6 +15,8 @@ import com.sky.mapper.SetMealDishMapper;
 import com.sky.mapper.SetMealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetMealService;
+import com.sky.vo.DishItemVO;
+import com.sky.vo.DishVO;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +78,7 @@ public class SetMealServiceImpl implements SetMealService {
      */
     @Override
     public void updateStatus(Integer status, Long id) {
-        if (Objects.equals(status, StatusConstant.ENABLE)){
+        if (Objects.equals(status, StatusConstant.ENABLE)) {
             // 检查套餐中的菜品是否存在未起售菜品
             // 先获取需要修改状态的套餐 与菜品之间的关系数据
             List<SetmealDish> setmealDishes = setMealDishMapper.listBySetMealId(id);
@@ -86,7 +88,7 @@ public class SetMealServiceImpl implements SetMealService {
 
             // 判断是否状态为禁用的菜品数目为0
             Integer disableCount = dishMapper.getDisableCount(dishIds);
-            if (disableCount != null){
+            if (disableCount != null) {
                 throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
             }
         }
@@ -162,5 +164,17 @@ public class SetMealServiceImpl implements SetMealService {
     @Override
     public List<Setmeal> listByCategoryIdUser(Long categoryId) {
         return setMealMapper.listByCategoryId(categoryId);
+    }
+
+    /**
+     * 根据套餐的 ID 查询其中包含的菜品信息
+     *
+     * @param id 提供的套餐 ID
+     * @return 返回封装了 DishItemVO 视图对象的 List 集合
+     */
+    @Override
+    public List<DishItemVO> listDishBySetMealId(Long id) {
+        // 根据 setMealID 查询套餐与菜品的关联信息
+        return setMealDishMapper.listSetMealDishInfoBySetMealId(id);
     }
 }

@@ -32,4 +32,10 @@
         from setmeal_dish
         where setmeal_id = #{setMealId}
     </select>
+
+    <select id="listSetMealDishInfoBySetMealId" resultType="com.sky.vo.DishItemVO">
+        select sd.*, d.image, d.description
+        from setmeal_dish sd
+                 left join dish d on sd.dish_id = d.id
+    </select>
 </mapper>
