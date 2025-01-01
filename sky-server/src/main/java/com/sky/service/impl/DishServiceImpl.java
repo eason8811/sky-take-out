@@ -47,8 +47,10 @@ public class DishServiceImpl implements DishService {
 
         // 添加菜品的口味
         List<DishFlavor> flavors = dishDTO.getFlavors();
-        flavors.forEach(flavor -> flavor.setDishId(dish.getId()));
-        dishFlavorMapper.insert(flavors);
+        if(flavors != null && !flavors.isEmpty()){
+            flavors.forEach(flavor -> flavor.setDishId(dish.getId()));
+            dishFlavorMapper.insert(flavors);
+        }
     }
 
     /**
