@@ -37,5 +37,6 @@
         select sd.*, d.image, d.description
         from setmeal_dish sd
                  left join dish d on sd.dish_id = d.id
+        where setmeal_id = #{setMealId}
     </select>
 </mapper>

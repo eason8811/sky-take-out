@@ -62,10 +62,10 @@ public interface DishMapper {
     /**
      * 根据分类ID查询菜品
      *
-     * @param categoryId 需要查询的菜品的分类的ID
+     * @param dishParam 需要查询的菜品的查询对象
      * @return 返回封装了 Dish 的集合对象
      */
-    List<Dish> listByCategoryId(Long categoryId);
+    List<Dish> listByCategoryId(Dish dishParam);
 
     /**
      * 获取提供的 ID 集合中status为禁用的对象

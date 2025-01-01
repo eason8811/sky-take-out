@@ -79,7 +79,17 @@
     <select id="listByCategoryId" resultType="com.sky.entity.Dish">
         select *
         from dish
-        where category_id = #{id}
+        <where>
+            <if test="name != null and name != ''">
+                d.name like concat('%', #{name}, '%')
+            </if>
+            <if test="status != null">
+                and d.status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and d.category_id = #{categoryId}
+            </if>
+        </where>
     </select>
 
     <select id="getDisableCount" resultType="java.lang.Integer">

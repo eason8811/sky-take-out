@@ -166,7 +166,7 @@ public class SetMealServiceImpl implements SetMealService {
         Setmeal setmeal = new Setmeal();
         setmeal.setCategoryId(categoryId);
         setmeal.setStatus(StatusConstant.ENABLE);
-        return setMealMapper.list(setmeal);
+        return setMealMapper.listByCategoryId(setmeal);
     }
 
     /**

@@ -73,5 +73,5 @@ public interface SetMealMapper {
      * @param setmeal 需要查询的 SetMeal 对象
      * @return 返回封装了 Setmeal 对象的 List 集合
      */
-    List<Setmeal> list(Setmeal setmeal);
+    List<Setmeal> listByCategoryId(Setmeal setmeal);
 }

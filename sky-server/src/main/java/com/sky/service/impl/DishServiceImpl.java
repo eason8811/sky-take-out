@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
@@ -146,7 +147,9 @@ public class DishServiceImpl implements DishService {
      */
     @Override
     public List<Dish> listByCategoryId(Long categoryId) {
-        return dishMapper.listByCategoryId(categoryId);
+        Dish dish = new Dish();
+        dish.setCategoryId(categoryId);
+        return dishMapper.listByCategoryId(dish);
     }
 
     /**
@@ -158,7 +161,10 @@ public class DishServiceImpl implements DishService {
     @Override
     public List<DishVO> listByCategoryIdUser(Long categoryId) {
         // 根据ID查询菜品信息
-        List<Dish> dishes = dishMapper.listByCategoryId(categoryId);
+        Dish dishParam = new Dish();
+        dishParam.setCategoryId(categoryId);
+        dishParam.setStatus(StatusConstant.ENABLE);
+        List<Dish> dishes = dishMapper.listByCategoryId(dishParam);
 
         // 根据每个菜品的ID查询菜品的口味信息
         return dishes.stream()
