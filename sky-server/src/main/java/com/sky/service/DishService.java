@@ -62,4 +62,12 @@ public interface DishService {
      * @return 返回封装了 Dish 的集合对象
      */
     List<Dish> listByCategoryId(Long categoryId);
+
+    /**
+     * 根据分类ID查询菜品
+     *
+     * @param categoryId 需要查询的菜品的分类的ID
+     * @return 返回封装了 DishVO 视图对象的集合对象
+     */
+    List<DishVO> listByCategoryIdUser(Long categoryId);
 }

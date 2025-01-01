@@ -73,13 +73,13 @@ public class DishServiceImpl implements DishService {
     public void delete(List<Long> ids) {
         // 判断菜品是否启用, 启用的菜品无法被删除
         Integer disableCount = dishMapper.getDisableCount(ids);
-        if (disableCount == null || disableCount < ids.size()){
+        if (disableCount == null || disableCount < ids.size()) {
             throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
         }
 
         // 判断菜品是否被套餐关联, 如果被关联则无法被删除
         List<Long> setMealIds = setMealDishMapper.listSetMealIdByDishId(ids);
-        if (!setMealIds.isEmpty()){
+        if (!setMealIds.isEmpty()) {
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
         // 删除菜品以及口味
@@ -147,5 +147,28 @@ public class DishServiceImpl implements DishService {
     @Override
     public List<Dish> listByCategoryId(Long categoryId) {
         return dishMapper.listByCategoryId(categoryId);
+    }
+
+    /**
+     * 根据分类ID查询菜品
+     *
+     * @param categoryId 需要查询的菜品的分类的ID
+     * @return 返回封装了 DishVO 视图对象的集合对象
+     */
+    @Override
+    public List<DishVO> listByCategoryIdUser(Long categoryId) {
+        // 根据ID查询菜品信息
+        List<Dish> dishes = dishMapper.listByCategoryId(categoryId);
+
+        // 根据每个菜品的ID查询菜品的口味信息
+        return dishes.stream()
+                .map(dish -> {
+                    DishVO dishVO = new DishVO();
+                    BeanUtils.copyProperties(dish, dishVO);
+                    List<DishFlavor> flavors = dishFlavorMapper.listByDishId(dish.getId());
+                    dishVO.setFlavors(flavors);
+                    return dishVO;
+                })
+                .toList();
     }
 }
