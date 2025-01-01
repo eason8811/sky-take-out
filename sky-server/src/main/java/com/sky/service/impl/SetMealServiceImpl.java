@@ -152,4 +152,15 @@ public class SetMealServiceImpl implements SetMealService {
         setmealDishes.forEach(setmealDish -> setmealDish.setSetmealId(setMealId));
         setMealDishMapper.insert(setmealDishes);
     }
+
+    /**
+     * 根据提供的分类 ID 查询套餐信息
+     *
+     * @param categoryId 提供的分类 ID
+     * @return 返回封装了 Setmeal 对象的 List 集合
+     */
+    @Override
+    public List<Setmeal> listByCategoryIdUser(Long categoryId) {
+        return setMealMapper.listByCategoryId(categoryId);
+    }
 }

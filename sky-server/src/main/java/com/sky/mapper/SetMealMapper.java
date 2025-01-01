@@ -66,4 +66,12 @@ public interface SetMealMapper {
      * @return 状态为禁用的套餐的数量
      */
     Integer getDisableCount(List<Long> ids);
+
+    /**
+     * 根据提供的分类 ID 查询套餐信息
+     *
+     * @param categoryId 提供的分类 ID
+     * @return 返回封装了 Setmeal 对象的 List 集合
+     */
+    List<Setmeal> listByCategoryId(Long categoryId);
 }
