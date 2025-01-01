@@ -70,8 +70,8 @@ public interface SetMealMapper {
     /**
      * 根据提供的分类 ID 查询套餐信息
      *
-     * @param categoryId 提供的分类 ID
+     * @param setmeal 需要查询的 SetMeal 对象
      * @return 返回封装了 Setmeal 对象的 List 集合
      */
-    List<Setmeal> listByCategoryId(Long categoryId);
+    List<Setmeal> list(Setmeal setmeal);
 }

@@ -163,7 +163,10 @@ public class SetMealServiceImpl implements SetMealService {
      */
     @Override
     public List<Setmeal> listByCategoryIdUser(Long categoryId) {
-        return setMealMapper.listByCategoryId(categoryId);
+        Setmeal setmeal = new Setmeal();
+        setmeal.setCategoryId(categoryId);
+        setmeal.setStatus(StatusConstant.ENABLE);
+        return setMealMapper.list(setmeal);
     }
 
     /**
