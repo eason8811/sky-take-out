@@ -6,6 +6,7 @@ import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ public class DishController {
      * @return 返回Result格式的对象
      */
     @GetMapping("/list")
+    @Cacheable(cacheNames = "dish", key = "#categoryId")
     public Result<List<DishVO>> list(Long categoryId){
         log.info("根据提供的分类 ID 查询菜品, 分类 ID 为: {}", categoryId);
         List<DishVO> dishVOList = dishService.listByCategoryIdUser(categoryId);

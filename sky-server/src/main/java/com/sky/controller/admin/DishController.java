@@ -10,6 +10,8 @@ import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +31,7 @@ public class DishController {
      * @return 返回Result格式的对象
      */
     @PostMapping
+    @CacheEvict(cacheNames = "dish", key = "#dishDTO.categoryId")
     public Result<Object> insert(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品, 参数为: {}", dishDTO);
         dishService.insert(dishDTO);
@@ -55,6 +58,7 @@ public class DishController {
      * @return 返回Result格式的对象
      */
     @DeleteMapping
+    @CacheEvict(cacheNames = "dish", allEntries = true)
     public Result<Object> delete(@RequestParam("ids") List<Long> ids) {
         log.info("删除菜品信息, 需要删除的ID为: {}", ids);
         dishService.delete(ids);
@@ -68,6 +72,7 @@ public class DishController {
      * @return 返回Result格式的对象
      */
     @PutMapping
+    @CacheEvict(cacheNames = "dish", allEntries = true)
     public Result<Object> update(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品, 参数为: {}", dishDTO);
         dishService.update(dishDTO);
@@ -82,6 +87,7 @@ public class DishController {
      * @return 返回Result格式的对象
      */
     @PostMapping("/status/{status}")
+    @CacheEvict(cacheNames = "dish", allEntries = true)
     public Result<Object> updateStatus(@PathVariable Integer status,
                                        @RequestParam("id") Long id) {
         log.info("修改菜品的起售、停售状态, 菜品 ID 为: {}, 目标状态为: {}（{}）", id,
