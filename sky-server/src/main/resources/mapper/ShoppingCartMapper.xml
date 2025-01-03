@@ -6,31 +6,31 @@
         select * from shopping_cart
         <where>
             <if test="name != null and name != ''">
-                and name = #{name},
+                and name = #{name}
             </if>
             <if test="userId != null">
-                and user_id = #{userId},
+                and user_id = #{userId}
             </if>
             <if test="dishId != null">
-                and dish_id = #{dishId},
+                and dish_id = #{dishId}
             </if>
             <if test="setmealId != null">
-                and setmeal_id = #{setmealId},
+                and setmeal_id = #{setmealId}
             </if>
             <if test="dishFlavor != null and dishFlavor != ''">
-                and dish_flavor = #{dishFlavor},
+                and dish_flavor = #{dishFlavor}
             </if>
             <if test="number != null">
-                and number = #{number},
+                and number = #{number}
             </if>
             <if test="amount != null">
-                and amount = #{amount},
+                and amount = #{amount}
             </if>
             <if test="image != null and image != ''">
-                and image = #{image},
+                and image = #{image}
             </if>
             <if test="createTime != null">
-                and create_time = #{createTime},
+                and create_time = #{createTime}
             </if>
         </where>
     </select>
