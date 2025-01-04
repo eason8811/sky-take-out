@@ -10,6 +10,7 @@ import com.sky.service.ShoppingCartService;
 import com.sky.vo.DishVO;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,5 +94,55 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     .build();
             shoppingCartMapper.update(shoppingCart);
         }
+    }
+
+    /**
+     * 获取购物车中的商品信息
+     *
+     * @return 返回封装了 ShoppingCart 对象的 List 集合
+     */
+    @Override
+    public List<ShoppingCart> list() {
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .userId(UserContext.getCurrentId())
+                .build();
+        return shoppingCartMapper.list(shoppingCart);
+    }
+
+    /**
+     * 删除购物车中的一个商品
+     *
+     * @param shoppingCartDTO 需要删除的商品信息
+     */
+    @Override
+    public void sub(ShoppingCartDTO shoppingCartDTO) {
+        // 构造该商品的实体类对象
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        shoppingCart.setUserId(UserContext.getCurrentId());
+
+        // 查询购物车中该商品的数量是否 > 1
+        // 由于限定了 userId, dishId, setmealId, dishFlavor, 因此查出来的数据是惟一的
+        ShoppingCart shoppingCartResult = shoppingCartMapper.list(shoppingCart).get(0);
+        if (shoppingCartResult.getNumber() > 1) {
+            // 若number > 1 则减少当前菜品 1 个数量
+            shoppingCartResult.setNumber(shoppingCartResult.getNumber() - 1);
+            shoppingCartMapper.update(shoppingCartResult);
+            return ;
+        }
+
+        // 否则删除该菜品
+        shoppingCartMapper.delete(List.of(shoppingCart));
+    }
+
+    /**
+     * 清空购物车
+     */
+    @Override
+    public void clean() {
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .userId(UserContext.getCurrentId())
+                .build();
+        shoppingCartMapper.delete(List.of(shoppingCart));
     }
 }

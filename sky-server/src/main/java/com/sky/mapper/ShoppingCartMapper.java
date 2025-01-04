@@ -27,4 +27,11 @@ public interface ShoppingCartMapper {
      * @param shoppingCart 需要修改的目标信息对象
      */
     void update(ShoppingCart shoppingCart);
+
+    /**
+     * 批量删除购物车中的商品
+     *
+     * @param shoppingCartList 封装了需要删除的商品信息的实体类对象 shoppingCart 的 List 集合
+     */
+    void delete(List<ShoppingCart> shoppingCartList);
 }

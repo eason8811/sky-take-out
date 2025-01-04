@@ -84,4 +84,22 @@
             </if>
         </where>
     </update>
+
+    <delete id="delete">
+        delete from shopping_cart
+        <where>
+            <foreach collection="shoppingCartList" item="shoppingCart" open="(" close=")" separator="or">
+                user_id = #{shoppingCart.userId}
+                <if test="shoppingCart.dishId != null">
+                    and dish_id = #{shoppingCart.dishId}
+                </if>
+                <if test="shoppingCart.setmealId != null">
+                    and setmeal_id = #{shoppingCart.setmealId}
+                </if>
+                <if test="shoppingCart.dishFlavor != null and shoppingCart.dishFlavor != ''">
+                    and dish_flavor = #{shoppingCart.dishFlavor}
+                </if>
+            </foreach>
+        </where>
+    </delete>
 </mapper>
