@@ -1,8 +1,13 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.context.UserContext;
 import com.sky.dto.OrdersDTO;
+import com.sky.dto.OrdersPageQueryDTO;
+import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
@@ -13,8 +18,11 @@ import com.sky.mapper.AddressMapper;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +107,45 @@ public class OrderServiceImpl implements OrderService {
                 .orderAmount(orders.getAmount())
                 .orderTime(orders.getOrderTime())
                 .build();
+    }
+
+    /**
+     * 用户进行订单支付
+     *
+     * @param ordersPaymentDTO 用于传输用户支付的订单信息的数据传输对象
+     * @return 返回 OrderPaymentVO 的视图对象
+     */
+    @Override
+    public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) {
+        // 将订单 status 改为已付款
+        Orders orders = new Orders();
+        orders.setStatus(Orders.TO_BE_CONFIRMED);
+        orders.setPayStatus(Orders.PAID);
+        orders.setPayMethod(ordersPaymentDTO.getPayMethod());
+        orders.setNumber(ordersPaymentDTO.getOrderNumber());
+        orders.setUserId(UserContext.getCurrentId());
+        orderMapper.update(orders);
+
+        return OrderPaymentVO.builder()
+                .nonceStr("abcdeason0x709394")
+                .paySign("s465g3s5b6r4hg35s46h3gsg1sr365g43s651gs56")
+                .timeStamp(String.valueOf(System.currentTimeMillis()))
+                .signType("RSA")
+                .packageStr("siefjosingish")
+                .build();
+    }
+
+    /**
+     * 分页查询订单信息
+     *
+     * @param ordersPageQueryDTO 用于传输分页查询参数的数据传输对象
+     * @return 返回封装了 OrderVO 对象的 Page 集合的 PageResult 对象
+     */
+    @Override
+    public PageResult list(OrdersPageQueryDTO ordersPageQueryDTO) {
+        ordersPageQueryDTO.setUserId(UserContext.getCurrentId());
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Page<OrderVO> orderVOPage = orderMapper.list(ordersPageQueryDTO);
+        return new PageResult(orderVOPage.getTotal(), orderVOPage.getResult());
     }
 }
