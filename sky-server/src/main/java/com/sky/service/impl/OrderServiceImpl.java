@@ -19,6 +19,7 @@ import com.sky.mapper.ShoppingCartMapper;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -150,7 +151,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 分页查询订单信息（管理员版）
+     *
+     * @param ordersPageQueryDTO 用于传输分页查询参数的数据传输对象
+     * @param isAdmin            是否是管理员
+     * @return 返回封装了 OrderVO 对象的 Page 集合的 PageResult 对象
+     */
+    @Override
+    public PageResult list(OrdersPageQueryDTO ordersPageQueryDTO, boolean isAdmin) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Page<OrderVO> orderVOPage = orderMapper.list(ordersPageQueryDTO);
+        return new PageResult(orderVOPage.getTotal(), orderVOPage.getResult());
+    }
+
+    /**
      * 根据 ID 查询订单详细信息
+     *
      * @param id 需要查询的订单 ID
      * @return 返回 OrderVO 的视图对象
      */
@@ -202,5 +218,40 @@ public class OrderServiceImpl implements OrderService {
 
         // 将购物车集合对象 shoppingCartList 插入数据库中
         shoppingCartMapper.insertBatch(shoppingCartList);
+    }
+
+    /**
+     * 进行订单信息统计
+     *
+     * @return 返回 OrderStatisticsVO 的订单统计的视图对象
+     */
+    @Override
+    public OrderStatisticsVO statistics() {
+        List<Map<String, Object>> list = orderMapper.statistics();
+        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
+        list.forEach(map -> {
+            if (map.get("status").equals("toBeConfirmed"))
+                orderStatisticsVO.setToBeConfirmed((Long) map.get("count"));
+            else if (map.get("status").equals("confirmed"))
+                orderStatisticsVO.setConfirmed((Long) map.get("count"));
+            else if (map.get("status").equals("deliveryInProgress"))
+                orderStatisticsVO.setDeliveryInProgress((Long) map.get("count"));
+        });
+        return orderStatisticsVO;
+    }
+
+    /**
+     * 根据订单 ID 进行接单
+     *
+     * @param id 需要接单的订单 ID
+     */
+    @Override
+    public void accept(Long id) {
+        Orders orders = Orders.builder()
+                .id(id)
+                .userId(UserContext.getCurrentId())
+                .status(Orders.CONFIRMED)
+                .build();
+        orderMapper.update(orders);
     }
 }

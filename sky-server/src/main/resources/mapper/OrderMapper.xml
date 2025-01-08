@@ -63,11 +63,11 @@
         from orders o
                  left join order_detail d on o.id = d.order_id
         <where>
-            <if test="number != null">
-                and o.number = #{number}
+            <if test="number != null and number != ''">
+                and o.number like concat('%', #{number}, '%')
             </if>
             <if test="phone != null and phone != ''">
-                and o.phone = #{phone}
+                and o.phone like concat('%', #{phone}, '%')
             </if>
             <if test="status != null">
                 and o.status = #{status}
@@ -81,7 +81,9 @@
             <if test="beginTime != null and endTime != null">
                 and o.order_time between #{beginTime} and #{endTime}
             </if>
-            and user_id = #{userId}
+            <if test="userId != null">
+                and o.user_id = #{userId}
+            </if>
         </where>
         order by o.order_time desc
     </select>
@@ -186,5 +188,17 @@
         from orders o
                  left join order_detail d on o.id = d.order_id
         where o.id = #{id}
+    </select>
+
+    <select id="statistics" resultType="java.util.Map">
+        select case status
+                   when 2 then 'toBeConfirmed'
+                   when 3 then 'confirmed'
+                   when 4 then 'deliveryInProgress'
+                   end status,
+               count(status) count
+        from orders
+        where status in (2, 3, 4)
+        group by status
     </select>
 </mapper>

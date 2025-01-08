@@ -6,6 +6,9 @@ import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+import java.util.Map;
+
 @Mapper
 public interface OrderMapper {
 
@@ -37,4 +40,11 @@ public interface OrderMapper {
      * @return 返回 OrderVO 的视图对象
      */
     OrderVO listById(Long id);
+
+    /**
+     * 获取不同订单状态的订单数量
+     *
+     * @return 返回封装了 Map 映射表对象的 List 对象
+     */
+    List<Map<String, Object>> statistics();
 }
