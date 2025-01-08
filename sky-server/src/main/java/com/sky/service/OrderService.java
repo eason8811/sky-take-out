@@ -1,9 +1,6 @@
 package com.sky.service;
 
-import com.sky.dto.OrdersDTO;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersRejectionDTO;
+import com.sky.dto.*;
 import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
@@ -60,6 +57,13 @@ public interface OrderService {
      * @param id 需要取消的订单 ID
      */
     void cancel(Long id);
+
+    /**
+     * 根据订单 ID 取消订单
+     *
+     * @param ordersCancelDTO 需要取消的订单 ID
+     */
+    void cancel(OrdersCancelDTO ordersCancelDTO);
 
     /**
      * 根据订单 ID 进行再来一单

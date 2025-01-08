@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersRejectionDTO;
@@ -78,9 +79,22 @@ public class OrderController {
      * @return 返回Result格式的对象
      */
     @PutMapping("/rejection")
-    public Result<Object> reject(@RequestBody OrdersRejectionDTO ordersRejectionDTO){
+    public Result<Object> reject(@RequestBody OrdersRejectionDTO ordersRejectionDTO) {
         log.info("正在拒单, 参数为: {}", ordersRejectionDTO);
         orderService.reject(ordersRejectionDTO);
+        return Result.success();
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param ordersCancelDTO 用于接收取消订单的信息的数据传输对象
+     * @return 返回Result格式的对象
+     */
+    @PutMapping("/cancel")
+    public Result<Object> cancel(@RequestBody OrdersCancelDTO ordersCancelDTO) {
+        log.info("正在取消订单, 参数为: {}", ordersCancelDTO);
+        orderService.cancel(ordersCancelDTO);
         return Result.success();
     }
 

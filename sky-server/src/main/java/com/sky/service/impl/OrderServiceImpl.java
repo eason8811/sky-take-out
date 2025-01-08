@@ -4,10 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.UserContext;
-import com.sky.dto.OrdersDTO;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersRejectionDTO;
+import com.sky.dto.*;
 import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
@@ -184,12 +181,51 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void cancel(Long id) {
-
+        OrderVO orderVO = orderMapper.listById(id);
+        if (orderVO.getStatus() >= Orders.TO_BE_CONFIRMED){
+            // 若在待接单及以后状态下取消订单，需要退款
+            Orders orders = Orders.builder()
+                    .id(id)
+                    .userId(UserContext.getCurrentId())
+                    .status(Orders.CANCELLED)
+                    .payStatus(Orders.REFUND)
+                    .build();
+            orderMapper.update(orders);
+            return;
+        }
+        // 待付款情况下不需要退款
         Orders orders = Orders.builder()
                 .id(id)
                 .userId(UserContext.getCurrentId())
                 .status(Orders.CANCELLED)
-                .payStatus(Orders.REFUND)
+                .build();
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 根据订单 ID 取消订单
+     *
+     * @param ordersCancelDTO 需要取消的订单 ID
+     */
+    @Override
+    public void cancel(OrdersCancelDTO ordersCancelDTO) {
+        OrderVO orderVO = orderMapper.listById(ordersCancelDTO.getId());
+        if (orderVO.getPayStatus().equals(Orders.PAID)){
+            // 用户已经付款，需要进行退款
+            Orders orders = Orders.builder()
+                    .id(ordersCancelDTO.getId())
+                    .cancelReason(ordersCancelDTO.getCancelReason())
+                    .status(Orders.CANCELLED)
+                    .payStatus(Orders.REFUND)
+                    .build();
+            orderMapper.update(orders);
+            return;
+        }
+        // 用户未进行付款，无需进行退款
+        Orders orders = Orders.builder()
+                .id(ordersCancelDTO.getId())
+                .cancelReason(ordersCancelDTO.getCancelReason())
+                .status(Orders.CANCELLED)
                 .build();
         orderMapper.update(orders);
     }
@@ -270,6 +306,17 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
 
+        // 若订单的支付状态为已支付，则需要退款
+        if (orderVO.getPayStatus().equals(Orders.PAID)){
+            Orders orders = Orders.builder()
+                    .id(ordersRejectionDTO.getId())
+                    .status(Orders.CANCELLED)
+                    .payStatus(Orders.REFUND)
+                    .rejectionReason(ordersRejectionDTO.getRejectionReason())
+                    .build();
+            orderMapper.update(orders);
+            return;
+        }
         Orders orders = Orders.builder()
                 .id(ordersRejectionDTO.getId())
                 .status(Orders.CANCELLED)
