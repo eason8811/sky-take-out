@@ -30,4 +30,11 @@ public interface OrderMapper {
      * @param orders 用于修改订单信息的实体类对象
      */
     void update(Orders orders);
+
+    /**
+     * 根据 ID 查询订单详细信息
+     * @param id 需要查询的订单 ID
+     * @return 返回 OrderVO 的视图对象
+     */
+    OrderVO listById(Long id);
 }

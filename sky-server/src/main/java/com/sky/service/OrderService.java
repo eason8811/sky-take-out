@@ -1,6 +1,5 @@
 package com.sky.service;
 
-import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.Orders;
@@ -34,4 +33,11 @@ public interface OrderService {
      * @return 返回封装了 OrderVO 对象的 Page 集合的 PageResult 对象
      */
     PageResult list(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 根据 ID 查询订单详细信息
+     * @param id 需要查询的订单 ID
+     * @return 返回 OrderVO 的视图对象
+     */
+    OrderVO listById(Long id);
 }

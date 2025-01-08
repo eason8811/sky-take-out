@@ -8,6 +8,7 @@ import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +58,17 @@ public class OrderController {
         log.info("正在分页查询订单信息, 参数为: {}", ordersPageQueryDTO);
         PageResult pageResult = orderService.list(ordersPageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 根据 ID 查询订单详细信息
+     * @param id 需要查询的订单 ID
+     * @return 返回Result格式的对象
+     */
+    @GetMapping("/orderDetail/{id}")
+    public Result<OrderVO> listById(@PathVariable Long id){
+        log.info("根据 ID 查询订单详细信息, ID 为: {}", id);
+        OrderVO orderVO = orderService.listById(id);
+        return Result.success(orderVO);
     }
 }

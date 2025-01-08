@@ -3,9 +3,7 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
-import com.sky.constant.StatusConstant;
 import com.sky.context.UserContext;
-import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.AddressBook;
@@ -103,6 +101,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 返回 OrderSubmitVO 视图对象
         return OrderSubmitVO.builder()
+                .id(orders.getId())
                 .orderNumber(orders.getNumber())
                 .orderAmount(orders.getAmount())
                 .orderTime(orders.getOrderTime())
@@ -147,5 +146,15 @@ public class OrderServiceImpl implements OrderService {
         PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
         Page<OrderVO> orderVOPage = orderMapper.list(ordersPageQueryDTO);
         return new PageResult(orderVOPage.getTotal(), orderVOPage.getResult());
+    }
+
+    /**
+     * 根据 ID 查询订单详细信息
+     * @param id 需要查询的订单 ID
+     * @return 返回 OrderVO 的视图对象
+     */
+    @Override
+    public OrderVO listById(Long id) {
+        return orderMapper.listById(id);
     }
 }

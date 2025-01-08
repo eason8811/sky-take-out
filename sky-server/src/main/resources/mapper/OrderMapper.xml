@@ -161,4 +161,20 @@
         </set>
         where user_id = #{userId} and number = #{number}
     </update>
+
+    <select id="listById" resultMap="orderVO">
+        select o.*,
+               d.id d_id,
+               d.name d_name,
+               d.image d_image,
+               d.order_id d_order_id,
+               d.dish_id d_dish_id,
+               d.setmeal_id d_setmeal_id,
+               d.dish_flavor d_dish_flavor,
+               d.number d_number,
+               d.amount d_amount
+        from orders o
+                 left join order_detail d on o.id = d.order_id
+        where o.id = #{id}
+    </select>
 </mapper>
