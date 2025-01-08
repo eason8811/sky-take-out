@@ -62,6 +62,7 @@ public class OrderController {
 
     /**
      * 根据 ID 查询订单详细信息
+     *
      * @param id 需要查询的订单 ID
      * @return 返回Result格式的对象
      */
@@ -70,5 +71,31 @@ public class OrderController {
         log.info("根据 ID 查询订单详细信息, ID 为: {}", id);
         OrderVO orderVO = orderService.listById(id);
         return Result.success(orderVO);
+    }
+
+    /**
+     * 根据订单 ID 取消订单
+     *
+     * @param id 需要取消的订单 ID
+     * @return 返回Result格式的对象
+     */
+    @PutMapping("/cancel/{id}")
+    public Result<Object> cancel(@PathVariable Long id){
+        log.info("用户正在取消订单, 订单 ID 为: {}", id);
+        orderService.cancel(id);
+        return Result.success();
+    }
+
+    /**
+     * 根据订单 ID 进行再来一单
+     *
+     * @param id 需要再来一单的订单 ID
+     * @return 返回Result格式的对象
+     */
+    @PostMapping("/repetition/{id}")
+    public Result<Object> repetition(@PathVariable Long id){
+        log.info("用户正在再来一单, 订单 ID 为: {}", id);
+        orderService.repetition(id);
+        return Result.success();
     }
 }

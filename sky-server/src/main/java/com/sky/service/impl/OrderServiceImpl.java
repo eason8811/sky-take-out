@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -156,5 +157,50 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderVO listById(Long id) {
         return orderMapper.listById(id);
+    }
+
+    /**
+     * 根据订单 ID 取消订单
+     *
+     * @param id 需要取消的订单 ID
+     */
+    @Override
+    public void cancel(Long id) {
+        Orders orders = Orders.builder()
+                .id(id)
+                .userId(UserContext.getCurrentId())
+                .status(Orders.CANCELLED)
+                .payStatus(Orders.REFUND)
+                .build();
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 根据订单 ID 进行再来一单
+     *
+     * @param id 需要再来一单的订单 ID
+     */
+    @Override
+    @Transactional
+    public void repetition(Long id) {
+        // 获取 ordersDetail 集合对象
+        OrderVO orderVO = orderMapper.listById(id);
+        Orders orders = new Orders();
+        BeanUtils.copyProperties(orderVO, orders);
+        List<OrderDetail> orderDetailList = orderVO.getOrderDetailList();
+        Long userId = UserContext.getCurrentId();
+
+        // 将 orderDetailList 集合对象中的 ordersDetail 对象转换为 ShoppingCart 对象
+        List<ShoppingCart> shoppingCartList = orderDetailList.stream()
+                .map(orderDetail -> {
+                    ShoppingCart shoppingCart = new ShoppingCart();
+                    BeanUtils.copyProperties(orderDetail, shoppingCart);
+                    shoppingCart.setUserId(userId);
+                    return shoppingCart;
+                })
+                .toList();
+
+        // 将购物车集合对象 shoppingCartList 插入数据库中
+        shoppingCartMapper.insertBatch(shoppingCartList);
     }
 }

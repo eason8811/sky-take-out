@@ -18,12 +18,14 @@ public interface ShoppingCartMapper {
 
     /**
      * 新增购物车项目
+     *
      * @param shoppingCart 购物车项目的实体类对象
      */
     void insert(ShoppingCart shoppingCart);
 
     /**
      * 修改购物车项目信息
+     *
      * @param shoppingCart 需要修改的目标信息对象
      */
     void update(ShoppingCart shoppingCart);
@@ -34,4 +36,11 @@ public interface ShoppingCartMapper {
      * @param shoppingCartList 封装了需要删除的商品信息的实体类对象 shoppingCart 的 List 集合
      */
     void delete(List<ShoppingCart> shoppingCartList);
+
+    /**
+     * 批量新增购物车项目
+     *
+     * @param shoppingCartList 封装了 ShoppingCart 购物车项目实体类对象的 List 集合
+     */
+    void insertBatch(List<ShoppingCart> shoppingCartList);
 }

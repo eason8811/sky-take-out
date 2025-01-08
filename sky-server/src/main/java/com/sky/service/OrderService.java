@@ -40,4 +40,18 @@ public interface OrderService {
      * @return 返回 OrderVO 的视图对象
      */
     OrderVO listById(Long id);
+
+    /**
+     * 根据订单 ID 取消订单
+     *
+     * @param id 需要取消的订单 ID
+     */
+    void cancel(Long id);
+
+    /**
+     * 根据订单 ID 进行再来一单
+     *
+     * @param id 需要再来一单的订单 ID
+     */
+    void repetition(Long id);
 }

@@ -159,7 +159,17 @@
                 tableware_status = #{tablewareStatus}
             </if>
         </set>
-        where user_id = #{userId} and number = #{number}
+        <where>
+            user_id = #{userId}
+            <if test="number != null">
+                and number = #{number}
+            </if>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+
+
     </update>
 
     <select id="listById" resultMap="orderVO">
