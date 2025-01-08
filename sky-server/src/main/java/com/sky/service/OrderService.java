@@ -1,5 +1,6 @@
 package com.sky.service;
 
+import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.Orders;
@@ -76,7 +77,7 @@ public interface OrderService {
     /**
      * 根据订单 ID 进行接单
      *
-     * @param id 需要接单的订单 ID
+     * @param ordersDTO 接收需要接单的订单 ID 的数据传输对象
      */
-    void accept(Long id);
+    void accept(OrdersDTO ordersDTO);
 }

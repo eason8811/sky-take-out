@@ -162,7 +162,9 @@
             </if>
         </set>
         <where>
-            user_id = #{userId}
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>
             <if test="number != null">
                 and number = #{number}
             </if>

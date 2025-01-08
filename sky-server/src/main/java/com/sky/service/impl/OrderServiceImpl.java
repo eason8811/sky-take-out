@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.UserContext;
+import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.entity.AddressBook;
@@ -243,13 +244,12 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 根据订单 ID 进行接单
      *
-     * @param id 需要接单的订单 ID
+     * @param ordersDTO 接收需要接单的订单 ID 的数据传输对象
      */
     @Override
-    public void accept(Long id) {
+    public void accept(OrdersDTO ordersDTO) {
         Orders orders = Orders.builder()
-                .id(id)
-                .userId(UserContext.getCurrentId())
+                .id(ordersDTO.getId())
                 .status(Orders.CONFIRMED)
                 .build();
         orderMapper.update(orders);

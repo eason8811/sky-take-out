@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
@@ -59,13 +60,13 @@ public class OrderController {
     /**
      * 根据订单 ID 进行接单
      *
-     * @param id 需要接单的订单 ID
+     * @param ordersDTO 接收需要接单的订单 ID 的数据传输对象
      * @return 返回Result格式的对象
      */
     @PutMapping("/confirm")
-    public Result<Object> accept(Long id) {
-        log.info("正在接单, 订单 ID 为: {}", id);
-        orderService.accept(id);
+    public Result<Object> accept(@RequestBody OrdersDTO ordersDTO) {
+        log.info("正在接单, 参数为: {}", ordersDTO);
+        orderService.accept(ordersDTO);
         return Result.success();
     }
 
