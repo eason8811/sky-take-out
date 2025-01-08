@@ -111,4 +111,17 @@ public class OrderController {
         return Result.success();
     }
 
+    /**
+     * 完成订单
+     *
+     * @param id 需要完成的订单的 ID
+     * @return 返回Result格式的对象
+     */
+    @PutMapping("/complete/{id}")
+    public Result<Object> complete(@PathVariable Long id){
+        log.info("正在完成订单, 订单 ID 为: {}", id);
+        orderService.complete(id);
+        return Result.success();
+    }
+
 }

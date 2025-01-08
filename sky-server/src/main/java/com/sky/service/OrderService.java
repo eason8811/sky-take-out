@@ -99,4 +99,11 @@ public interface OrderService {
      * @param id 需要派送的订单 ID
      */
     void delivery(Long id);
+
+    /**
+     * 完成订单
+     *
+     * @param id 需要完成的订单的 ID
+     */
+    void complete(Long id);
 }

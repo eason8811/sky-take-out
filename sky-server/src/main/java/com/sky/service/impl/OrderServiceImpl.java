@@ -345,4 +345,23 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         orderMapper.update(orders);
     }
+
+    /**
+     * 完成订单
+     *
+     * @param id 需要完成的订单的 ID
+     */
+    @Override
+    public void complete(Long id) {
+        OrderVO orderVO = orderMapper.listById(id);
+        if (!orderVO.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+            // 只有派送中的订单可以进行 完成订单 操作，否则抛出异常
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Orders orders = Orders.builder()
+                .id(id)
+                .status(Orders.COMPLETED)
+                .build();
+        orderMapper.update(orders);
+    }
 }
