@@ -2,6 +2,7 @@ package com.sky.controller.admin;
 
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
@@ -67,6 +68,19 @@ public class OrderController {
     public Result<Object> accept(@RequestBody OrdersDTO ordersDTO) {
         log.info("正在接单, 参数为: {}", ordersDTO);
         orderService.accept(ordersDTO);
+        return Result.success();
+    }
+
+    /**
+     * 根据订单 ID 进行拒单
+     *
+     * @param ordersRejectionDTO 用于接收拒单信息的数据传输对象
+     * @return 返回Result格式的对象
+     */
+    @PutMapping("/rejection")
+    public Result<Object> reject(@RequestBody OrdersRejectionDTO ordersRejectionDTO){
+        log.info("正在拒单, 参数为: {}", ordersRejectionDTO);
+        orderService.reject(ordersRejectionDTO);
         return Result.success();
     }
 

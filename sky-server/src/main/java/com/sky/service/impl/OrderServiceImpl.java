@@ -7,6 +7,7 @@ import com.sky.context.UserContext;
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
@@ -183,6 +184,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void cancel(Long id) {
+
         Orders orders = Orders.builder()
                 .id(id)
                 .userId(UserContext.getCurrentId())
@@ -251,6 +253,27 @@ public class OrderServiceImpl implements OrderService {
         Orders orders = Orders.builder()
                 .id(ordersDTO.getId())
                 .status(Orders.CONFIRMED)
+                .build();
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 根据订单 ID 进行拒单
+     *
+     * @param ordersRejectionDTO 用于接收拒单信息的数据传输对象
+     */
+    @Override
+    public void reject(OrdersRejectionDTO ordersRejectionDTO) {
+        OrderVO orderVO = orderMapper.listById(ordersRejectionDTO.getId());
+        if (!orderVO.getStatus().equals(Orders.TO_BE_CONFIRMED)){
+            // 如果当前订单状态不是 待接单 则无法拒单
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Orders orders = Orders.builder()
+                .id(ordersRejectionDTO.getId())
+                .status(Orders.CANCELLED)
+                .rejectionReason(ordersRejectionDTO.getRejectionReason())
                 .build();
         orderMapper.update(orders);
     }

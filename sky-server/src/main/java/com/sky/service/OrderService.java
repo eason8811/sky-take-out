@@ -3,6 +3,7 @@ package com.sky.service;
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
@@ -80,4 +81,11 @@ public interface OrderService {
      * @param ordersDTO 接收需要接单的订单 ID 的数据传输对象
      */
     void accept(OrdersDTO ordersDTO);
+
+    /**
+     * 根据订单 ID 进行拒单
+     *
+     * @param ordersRejectionDTO 用于接收拒单信息的数据传输对象
+     */
+    void reject(OrdersRejectionDTO ordersRejectionDTO);
 }
