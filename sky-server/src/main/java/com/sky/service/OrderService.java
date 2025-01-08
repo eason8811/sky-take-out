@@ -92,4 +92,11 @@ public interface OrderService {
      * @param ordersRejectionDTO 用于接收拒单信息的数据传输对象
      */
     void reject(OrdersRejectionDTO ordersRejectionDTO);
+
+    /**
+     * 派送订单
+     *
+     * @param id 需要派送的订单 ID
+     */
+    void delivery(Long id);
 }

@@ -324,4 +324,25 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         orderMapper.update(orders);
     }
+
+    /**
+     * 派送订单
+     *
+     * @param id 需要派送的订单 ID
+     */
+    @Override
+    public void delivery(Long id) {
+        OrderVO orderVO = orderMapper.listById(id);
+        if (orderVO.getStatus() >= Orders.DELIVERY_IN_PROGRESS) {
+            // 若订单状态处于派送中及之后的状态，则无法进行派送，抛出异常
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        // 否则修改订单状态为派送中
+        Orders orders = Orders.builder()
+                .id(id)
+                .status(Orders.DELIVERY_IN_PROGRESS)
+                .build();
+        orderMapper.update(orders);
+    }
 }

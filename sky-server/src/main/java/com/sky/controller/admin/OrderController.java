@@ -98,4 +98,17 @@ public class OrderController {
         return Result.success();
     }
 
+    /**
+     * 派送订单
+     *
+     * @param id 需要派送的订单 ID
+     * @return 返回Result格式的对象
+     */
+    @PutMapping("/delivery/{id}")
+    public Result<Object> delivery(@PathVariable Long id){
+        log.info("正在派送订单, 订单 ID 为: {}", id);
+        orderService.delivery(id);
+        return Result.success();
+    }
+
 }
