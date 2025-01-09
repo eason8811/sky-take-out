@@ -2,7 +2,6 @@ package com.sky.websocket;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -16,11 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@ServerEndpoint("ws/{sid}")
+@ServerEndpoint("/ws/{sid}")
 @Slf4j
 public class WebSocketServer {
 
-    private final Map<String, Session> sessionMap = new HashMap<>();
+    private static final Map<String, Session> sessionMap = new HashMap<>();
 
     /**
      * 建立连接成功时调用的方法
@@ -29,7 +28,7 @@ public class WebSocketServer {
      * @param sid 客户端的 sid
      */
     @OnOpen
-    public void onOpen(Session session, @PathVariable String sid){
+    public void onOpen(Session session, @PathParam("sid") String sid){
         log.info("客户端: {} 正在建立连接", sid);
         sessionMap.put(sid, session);
     }
