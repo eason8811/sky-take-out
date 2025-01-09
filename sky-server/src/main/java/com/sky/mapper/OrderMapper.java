@@ -5,7 +5,9 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -47,4 +49,12 @@ public interface OrderMapper {
      * @return 返回封装了 Map 映射表对象的 List 对象
      */
     List<Map<String, Object>> statistics();
+
+    /**
+     * 根据订单 状态 和 检查时间 查询符合条件的超时订单
+     * @param status 查询的订单的状态
+     * @param checkTime 查询的订单的检查时间
+     */
+    @Select("select * from orders where status = #{status} and order_time < #{checkTime};")
+    List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime checkTime);
 }
