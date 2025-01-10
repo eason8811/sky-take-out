@@ -57,4 +57,13 @@ public interface OrderMapper {
      */
     @Select("select * from orders where status = #{status} and order_time < #{checkTime};")
     List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime checkTime);
+
+    /**
+     *
+     * @param begin 开始日期
+     * @param end 结束日期
+     * @param status 状态为完成的订单
+     * @return 返回日期区间内的营业额
+     */
+    Integer getTurnover(LocalDateTime begin, LocalDateTime end, Integer status);
 }
