@@ -106,4 +106,11 @@ public interface OrderService {
      * @param id 需要完成的订单的 ID
      */
     void complete(Long id);
+
+    /**
+     * 根据 ID 进行催单
+     *
+     * @param id 需要进行催单的订单 ID
+     */
+    void reminder(Long id);
 }

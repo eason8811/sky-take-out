@@ -98,4 +98,17 @@ public class OrderController {
         orderService.repetition(id);
         return Result.success();
     }
+
+    /**
+     * 根据 ID 进行催单
+     *
+     * @param id 需要进行催单的订单 ID
+     * @return 返回Result格式的对象
+     */
+    @GetMapping("/reminder/{id}")
+    public Result<Object> reminder(@PathVariable Long id){
+        log.info("用户正在进行催单, ID 为: {}", id);
+        orderService.reminder(id);
+        return Result.success();
+    }
 }

@@ -132,15 +132,7 @@ public class OrderServiceImpl implements OrderService {
         orders.setUserId(UserContext.getCurrentId());
         orderMapper.update(orders);
 
-        // 使用 websocket 向所有客户端推送来单信息
-        Map<String, Object> map = new HashMap<>();
-        map.put("type", 1);
-        map.put("orderId", orders.getNumber());
-        map.put("content", orders.getNumber());
-
-        // 将 map 对象转换为 JSON 字符串 并通过 websocket 群发到所有客户端
-        String jsonString = JSON.toJSONString(map);
-        webSocketServer.sendToAllClient(jsonString);
+        wsSendToAllClient(1, Long.valueOf(orders.getNumber()), orders.getNumber());
 
         return OrderPaymentVO.builder()
                 .nonceStr("abcdeason0x709394")
@@ -379,5 +371,30 @@ public class OrderServiceImpl implements OrderService {
                 .status(Orders.COMPLETED)
                 .build();
         orderMapper.update(orders);
+    }
+
+    /**
+     * 根据 ID 进行催单
+     *
+     * @param id 需要进行催单的订单 ID
+     */
+    @Override
+    public void reminder(Long id) {
+        OrderVO orderVO = orderMapper.listById(id);
+
+        // 通过 websocket 群发到所有客户端
+        wsSendToAllClient(2, orderVO.getId(), orderVO.getNumber());
+    }
+
+    private void wsSendToAllClient(Integer type, Long orderId, String number){
+        // 使用 websocket 向所有客户端推送来单信息
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", type);
+        map.put("orderId", orderId);
+        map.put("content", number);
+
+        // 将 map 对象转换为 JSON 字符串 并通过 websocket 群发到所有客户端
+        String jsonString = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(jsonString);
     }
 }
