@@ -204,7 +204,7 @@
         group by status
     </select>
 
-    <select id="getTurnover" resultType="java.lang.Integer">
+    <select id="getTurnover" resultType="java.lang.Double">
         select sum(amount)
         from orders
         where status = #{status} and order_time between #{begin} and #{end}
