@@ -9,6 +9,7 @@ import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DishMapper {
@@ -74,4 +75,12 @@ public interface DishMapper {
      * @return 禁用的菜品的数量
      */
     Integer getDisableCount(List<Long> ids);
+
+    /**
+     * 根据条件统计菜品数量
+     *
+     * @param map 用于传输查询参数的 map 集合
+     * @return 返回菜品数量
+     */
+    Integer countByMap(Map<String, Object> map);
 }

@@ -9,6 +9,7 @@ import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SetMealMapper {
@@ -74,4 +75,12 @@ public interface SetMealMapper {
      * @return 返回封装了 Setmeal 对象的 List 集合
      */
     List<Setmeal> listByCategoryId(Setmeal setmeal);
+
+    /**
+     * 根据条件统计套餐数量
+     *
+     * @param map 用于传输查询参数的 map 集合
+     * @return 返回套餐数量
+     */
+    Integer countByMap(Map<String, Object> map);
 }

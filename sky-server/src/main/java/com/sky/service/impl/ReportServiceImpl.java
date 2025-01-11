@@ -78,11 +78,11 @@ public class ReportServiceImpl implements ReportService {
         List<LocalDate> dateList = generateDateList(begin, end);
 
         // 获取营业额 turnoverList
-        List<Integer> turnoverList = new ArrayList<>();
+        List<Double> turnoverList = new ArrayList<>();
         for (LocalDate date : dateList) {
             LocalDateTime queryBegin = LocalDateTime.of(date, LocalTime.MIN);
             LocalDateTime queryEnd = LocalDateTime.of(date, LocalTime.MAX);
-            Integer turnover = orderMapper.getTurnover(queryBegin, queryEnd, Orders.COMPLETED);
+            Double turnover = orderMapper.getTurnover(queryBegin, queryEnd, Orders.COMPLETED);
             turnoverList.add(turnover != null ? turnover : 0);
         }
 

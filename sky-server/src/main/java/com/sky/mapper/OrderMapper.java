@@ -68,7 +68,7 @@ public interface OrderMapper {
      * @param status 状态为完成的订单
      * @return 返回日期区间内的营业额
      */
-    Integer getTurnover(LocalDateTime begin, LocalDateTime end, Integer status);
+    Double getTurnover(LocalDateTime begin, LocalDateTime end, Integer status);
 
     /**
      * 获取日期区间之内的订单数目
@@ -90,7 +90,7 @@ public interface OrderMapper {
     Integer getValidCount(LocalDateTime begin, LocalDateTime end, Integer status);
 
     /**
-     * 获取日期区间之内的销量前十菜品信息
+     * 获取日期区间之内的销量前 10 菜品信息
      *
      * @param begin 开始日期
      * @param end 结束日期
