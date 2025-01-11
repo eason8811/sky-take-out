@@ -38,6 +38,7 @@ public interface OrderMapper {
 
     /**
      * 根据 ID 查询订单详细信息
+     *
      * @param id 需要查询的订单 ID
      * @return 返回 OrderVO 的视图对象
      */
@@ -52,6 +53,7 @@ public interface OrderMapper {
 
     /**
      * 根据订单 状态 和 检查时间 查询符合条件的超时订单
+     *
      * @param status 查询的订单的状态
      * @param checkTime 查询的订单的检查时间
      */
@@ -59,6 +61,7 @@ public interface OrderMapper {
     List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime checkTime);
 
     /**
+     * 获取日期区间之内状态为 完成 的订单营业额
      *
      * @param begin 开始日期
      * @param end 结束日期
@@ -66,4 +69,32 @@ public interface OrderMapper {
      * @return 返回日期区间内的营业额
      */
     Integer getTurnover(LocalDateTime begin, LocalDateTime end, Integer status);
+
+    /**
+     * 获取日期区间之内的订单数目
+     *
+     * @param begin 开始日期
+     * @param end 结束日期
+     * @return 返回日期区间内的订单数量
+     */
+    Integer getCount(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * 获取日期之内的有效订单数目
+     *
+     * @param begin 开始日期
+     * @param end 结束日期
+     * @param status 订单状态
+     * @return 返回日期区间内的有效订单数量
+     */
+    Integer getValidCount(LocalDateTime begin, LocalDateTime end, Integer status);
+
+    /**
+     * 获取日期区间之内的销量前十菜品信息
+     *
+     * @param begin 开始日期
+     * @param end 结束日期
+     * @return 返回封装了 Map 集合对象的 List 集合
+     */
+    List<Map<String, Object>> getTop10(LocalDateTime begin, LocalDateTime end);
 }
